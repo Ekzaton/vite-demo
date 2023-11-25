@@ -10,6 +10,17 @@ const htmlPlugin = () => {
       return html
           .replaceAll('.js', '.js?' + hash)
           .replaceAll('.css', '.css?' + hash)
+    },
+  }
+}
+
+const assetsPlugin = () => {
+  return {
+    name: 'assets-transform',
+    transformIndexHtml(bandle) {
+      const hash = Date.now()
+
+      return bandle
           .replaceAll('.svg', '.svg?' + hash)
           .replaceAll('.png', '.png?' + hash)
           .replaceAll('.jpg', '.jpg?' + hash)
@@ -22,6 +33,7 @@ export default defineConfig({
   plugins: [
       react(),
       htmlPlugin(),
+      assetsPlugin(),
   ],
   build: {
     rollupOptions: {
