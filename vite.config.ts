@@ -1,9 +1,25 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
+const htmlPlugin = () => {
+  return {
+    name: 'html-transform',
+    transformIndexHtml(html) {
+      const hash = Date.now()
+
+      return html
+          .replaceAll('.js', '.js?' + hash)
+          .replaceAll('.css', '.css?' + hash)
+    },
+  }
+}
+
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+      react(),
+      htmlPlugin(),
+  ],
   build: {
     rollupOptions: {
       cache: true,
