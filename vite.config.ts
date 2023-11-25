@@ -10,6 +10,9 @@ const htmlPlugin = () => {
       return html
           .replaceAll('.js', '.js?' + hash)
           .replaceAll('.css', '.css?' + hash)
+          .replaceAll('.svg', '.svg?' + hash)
+          .replaceAll('.png', '.png?' + hash)
+          .replaceAll('.jpg', '.jpg?' + hash)
     },
   }
 }
