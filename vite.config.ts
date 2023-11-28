@@ -1,7 +1,8 @@
 import { defineConfig } from 'vite'
+import replace from '@rollup/plugin-replace';
 import react from '@vitejs/plugin-react'
 
-const htmlPlugin = () => {
+const htmlTransformPlugin = () => {
   return {
     name: 'html-transform',
     transformIndexHtml(html) {
@@ -14,29 +15,26 @@ const htmlPlugin = () => {
   }
 }
 
-const assetsPlugin = () => {
-  return {
-    name: 'assets-transform',
-    transformIndexHtml(bandle) {
-      const hash = Date.now()
-
-      return bandle
-          .replaceAll('.svg', '.svg?' + hash)
-          .replaceAll('.png', '.png?' + hash)
-          .replaceAll('.jpg', '.jpg?' + hash)
-    },
-  }
-}
-
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
       react(),
-      htmlPlugin(),
-      assetsPlugin(),
+      htmlTransformPlugin(),
   ],
   build: {
     rollupOptions: {
+      plugins: [
+        replace({
+          include: ['**/*.js'],
+          values: {
+            '.svg': '.svg?' + Date.now(),
+            '.png': '.png?' + Date.now(),
+            '.jp(e)?g': '.jp(e)?g?' + Date.now(),
+            '.gif': '.gif?' + Date.now(),
+            '.webp': '.webp?' + Date.now(),
+          },
+        }),
+      ],
       cache: true,
       output: {
         entryFileNames: `assets/[name].js`,
